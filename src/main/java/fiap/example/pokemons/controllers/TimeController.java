@@ -1,0 +1,41 @@
+package fiap.example.pokemons.controllers;
+
+import fiap.example.pokemons.models.Time;
+import fiap.example.pokemons.services.TimeService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/times")
+public class TimeController {
+
+    @Autowired
+    private TimeService service;
+
+    @GetMapping
+    public List<Time> getTimes() {
+        return service.getTimes();
+    }
+
+    @PostMapping
+    public Time addTime(@RequestBody Time time) {
+        return service.addTime(time);
+    }
+
+    @GetMapping("/{id}")
+    public Time getTimeById(@PathVariable Long id) {
+        return service.getTimeById(id).orElse(null);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteTime(@PathVariable Long id) {
+        service.deleteTime(id);
+    }
+
+    @PutMapping("/{id}")
+    public Time updateTime(@PathVariable Long id, @RequestBody Time time) {
+        return service.updateTime(id, time);
+    }
+}
