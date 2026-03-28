@@ -1,5 +1,6 @@
 package fiap.example.pokemons.services;
 
+import fiap.example.pokemons.dto.TreinadorDTO;
 import fiap.example.pokemons.models.Treinador;
 import fiap.example.pokemons.repository.TreinadorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,18 +17,34 @@ public class TreinadorService {
     @Autowired
     private TreinadorRepository repository;
 
+    // GET ALL
     public List<Treinador> getTreinadores() {
         return repository.findAll();
     }
 
-    public Treinador addTreinador(Treinador treinador) {
-        return repository.save(treinador);
-    }
-
+    // GET BY ID
     public Optional<Treinador> getTreinadorById(Long id) {
         return repository.findById(id);
     }
 
+    // POST
+    public Treinador addTreinador(Treinador treinador) {
+        return repository.save(treinador);
+    }
+
+    // PUT
+    public Treinador updateTreinador(Long id, Treinador novo) {
+
+        var optional = getTreinadorById(id);
+        if (optional.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "TREINADOR NÃO ENCONTRADO");
+        }
+
+        novo.setId(id);
+        return repository.save(novo);
+    }
+
+    // DELETE
     public void deleteTreinador(Long id) {
         var optional = getTreinadorById(id);
 
@@ -38,14 +55,17 @@ public class TreinadorService {
         repository.deleteById(id);
     }
 
-    public Treinador updateTreinador(Long id, Treinador novo) {
-        var optional = getTreinadorById(id);
+    // ENTITY -> DTO
+    public TreinadorDTO toDTO(Treinador t) {
 
-        if (optional.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "TREINADOR NÃO ENCONTRADO");
-        }
+        TreinadorDTO dto = new TreinadorDTO();
 
-        novo.setId(id);
-        return repository.save(novo);
+        dto.setId(t.getId());
+        dto.setNome(t.getNome());
+        dto.setEmail(t.getEmail());
+        dto.setIdade(t.getIdade());
+        dto.setAtivo(t.getAtivo());
+
+        return dto;
     }
 }

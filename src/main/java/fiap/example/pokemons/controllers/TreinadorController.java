@@ -1,7 +1,9 @@
 package fiap.example.pokemons.controllers;
 
+import fiap.example.pokemons.dto.TreinadorDTO;
 import fiap.example.pokemons.models.Treinador;
 import fiap.example.pokemons.services.TreinadorService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,28 +16,38 @@ public class TreinadorController {
     @Autowired
     private TreinadorService service;
 
+    // GET ALL (usando DTO)
     @GetMapping
-    public List<Treinador> getTreinadores() {
-        return service.getTreinadores();
+    public List<TreinadorDTO> getTreinadores() {
+        return service.getTreinadores()
+                .stream()
+                .map(service::toDTO)
+                .toList();
     }
 
+    // GET BY ID (usando DTO)
+    @GetMapping("/{id}")
+    public TreinadorDTO getTreinadorById(@PathVariable Long id) {
+        return service.getTreinadorById(id)
+                .map(service::toDTO)
+                .orElseThrow(() -> new RuntimeException("TREINADOR NÃO ENCONTRADO"));
+    }
+
+    // POST (continua com entity)
     @PostMapping
     public Treinador addTreinador(@RequestBody Treinador treinador) {
         return service.addTreinador(treinador);
     }
 
-    @GetMapping("/{id}")
-    public Treinador getTreinadorById(@PathVariable Long id) {
-        return service.getTreinadorById(id).orElse(null);
-    }
-
-    @DeleteMapping("/{id}")
-    public void deleteTreinador(@PathVariable Long id) {
-        service.deleteTreinador(id);
-    }
-
+    // PUT
     @PutMapping("/{id}")
     public Treinador updateTreinador(@PathVariable Long id, @RequestBody Treinador treinador) {
         return service.updateTreinador(id, treinador);
+    }
+
+    // DELETE
+    @DeleteMapping("/{id}")
+    public void deleteTreinador(@PathVariable Long id) {
+        service.deleteTreinador(id);
     }
 }

@@ -1,7 +1,9 @@
 package fiap.example.pokemons.controllers;
 
+import fiap.example.pokemons.dto.PokemonDTO;
 import fiap.example.pokemons.models.Pokemon;
 import fiap.example.pokemons.services.PokemonService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,28 +16,38 @@ public class PokemonController {
     @Autowired
     private PokemonService service;
 
+    // GET ALL (com DTO)
     @GetMapping
-    public List<Pokemon> getPokemons() {
-        return service.getPokemons();
+    public List<PokemonDTO> getPokemons() {
+        return service.getPokemons()
+                .stream()
+                .map(service::toDTO)
+                .toList();
     }
 
+    // GET BY ID (com DTO)
+    @GetMapping("/{id}")
+    public PokemonDTO getPokemonById(@PathVariable Long id) {
+        return service.getPokemonById(id)
+                .map(service::toDTO)
+                .orElseThrow(() -> new RuntimeException("POKEMON NÃO ENCONTRADO"));
+    }
+
+    // POST (entity)
     @PostMapping
     public Pokemon addPokemon(@RequestBody Pokemon pokemon) {
         return service.addPokemon(pokemon);
     }
 
-    @GetMapping("/{id}")
-    public Pokemon getPokemonById(@PathVariable Long id) {
-        return service.getPokemonById(id).orElse(null);
-    }
-
-    @DeleteMapping("/{id}")
-    public void deletePokemon(@PathVariable Long id) {
-        service.deletePokemon(id);
-    }
-
+    // PUT
     @PutMapping("/{id}")
     public Pokemon updatePokemon(@PathVariable Long id, @RequestBody Pokemon pokemon) {
         return service.updatePokemon(id, pokemon);
+    }
+
+    // DELETE
+    @DeleteMapping("/{id}")
+    public void deletePokemon(@PathVariable Long id) {
+        service.deletePokemon(id);
     }
 }
