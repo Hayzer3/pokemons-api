@@ -16,7 +16,7 @@ public class TreinadorController {
     @Autowired
     private TreinadorService service;
 
-    // GET ALL (usando DTO)
+    // GET ALL
     @GetMapping
     public List<TreinadorDTO> getTreinadores() {
         return service.getTreinadores()
@@ -25,7 +25,7 @@ public class TreinadorController {
                 .toList();
     }
 
-    // GET BY ID (usando DTO)
+    // GET BY ID
     @GetMapping("/{id}")
     public TreinadorDTO getTreinadorById(@PathVariable Long id) {
         return service.getTreinadorById(id)
@@ -33,7 +33,7 @@ public class TreinadorController {
                 .orElseThrow(() -> new RuntimeException("TREINADOR NÃO ENCONTRADO"));
     }
 
-    // POST (continua com entity)
+    // POST
     @PostMapping
     public Treinador addTreinador(@RequestBody Treinador treinador) {
         return service.addTreinador(treinador);

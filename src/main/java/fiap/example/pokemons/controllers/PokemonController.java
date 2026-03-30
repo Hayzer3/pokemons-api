@@ -16,7 +16,7 @@ public class PokemonController {
     @Autowired
     private PokemonService service;
 
-    // GET ALL (com DTO)
+    // GET ALL
     @GetMapping
     public List<PokemonDTO> getPokemons() {
         return service.getPokemons()
@@ -25,7 +25,7 @@ public class PokemonController {
                 .toList();
     }
 
-    // GET BY ID (com DTO)
+    // GET BY ID
     @GetMapping("/{id}")
     public PokemonDTO getPokemonById(@PathVariable Long id) {
         return service.getPokemonById(id)
