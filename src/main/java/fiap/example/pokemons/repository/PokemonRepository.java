@@ -1,4 +1,8 @@
 package fiap.example.pokemons.repository;
 
-public class PokemonRepository {
+import fiap.example.pokemons.models.Pokemon;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface PokemonRepository extends JpaRepository<Pokemon, Long> {
+
 }
