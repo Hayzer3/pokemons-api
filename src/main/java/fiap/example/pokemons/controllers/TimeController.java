@@ -16,7 +16,7 @@ public class TimeController {
     @Autowired
     private TimeService service;
 
-    // GET ALL (com DTO)
+    // GET ALL
     @GetMapping
     public List<TimeDTO> getTimes() {
         return service.getTimes()
@@ -25,7 +25,7 @@ public class TimeController {
                 .toList();
     }
 
-    // GET BY ID (com DTO)
+    // GET BY ID
     @GetMapping("/{id}")
     public TimeDTO getTimeById(@PathVariable Long id) {
         return service.getTimeById(id)
@@ -33,7 +33,7 @@ public class TimeController {
                 .orElseThrow(() -> new RuntimeException("TIME NÃO ENCONTRADO"));
     }
 
-    // POST (entity)
+    // POST
     @PostMapping
     public Time addTime(@RequestBody Time time) {
         return service.addTime(time);
